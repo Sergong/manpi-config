@@ -18,6 +18,7 @@
         group: "{{ username }}"
         mode: '0774'
 
+    # The following tasks requires an the vnc_pass to be configured in group or host vars
     - name: Create the X11VNC password file
       shell: x11vnc -storepasswd {{ vnc_pass }} /home/{{ username }}/.vnc/passwd
       args:
