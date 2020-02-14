@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo "Allow SUDO without password"
+ansible local -b -K -m copy -a 'content="smeeuwsen ALL=(ALL) NOPASSWD: ALL" dest=/etc/sudoers.d/smeeuwsen'
+

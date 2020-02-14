@@ -1,0 +1,14 @@
+[unit]
+Description=VNC Server for X11
+Requires=display-manager.service
+After=display-manager.service
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/x11vnc -nap -wait 50 -noxdamage -rfbauth /home/{{ username }}/.vnc/passwd -display :0 -nocursor -forever -o /home/{{ username }}/.vnc/x11vnc.log -bg
+Restart=on-failure
+RestartSec=10
+User={{ username }}
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,47 @@
+---
+- name: play to configure X11VNC Server
+  hosts: local
+  vars:
+    username: smeeuwsen
+
+  tasks:
+    - name: Create the .vnc directory
+      file:
+        path: /home/{{ username }}/.vnc
+        state: directory
+        owner: "{{ username }}"
+        group: "{{ username }}"
+        mode: '0774'
+
+    - name: Create the X11VNC password file
+      shell: x11vnc -storepasswd {{ vnc_pass }} /home/{{ username }}/.vnc/passwd
+      args:
+        creates: /home/{{ username }}/.vnc/passwd
+  
+    - name: Set the attributes for the passwd file
+      file:
+        path: /home/{{ username }}/.vnc/passwd
+        owner: "{{ username }}"
+        group: "{{ username }}"
+        mode: '0770'
+
+    - name: Create a log file for vnc
+      file:
+        path: /home/{{ username }}/.vnc/x11vnc.log
+        state: touch
+        owner: "{{ username }}"
+        group: "{{ username }}"
+        mode: '0774'
+        
+    - name: Deploy the service definition
+      template:
+        src: template/x11vnc.service.j2
+        dest: /etc/systemd/system/x11vnc.service
+
+    - name: Start and enable the x11vnc service
+      service:
+        name: x11vnc
+        state: started
+        enabled: true
+
+
