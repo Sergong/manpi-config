@@ -1,10 +1,15 @@
 ---
-- name: play to configure X11VNC Server
+- name: play to Install and Configure X11VNC Server
   hosts: local
   vars:
     username: smeeuwsen
 
   tasks:
+    - name: Install X11vncserver package
+      package:
+        name: x11vnc
+        state: present
+  
     - name: Create the .vnc directory
       file:
         path: /home/{{ username }}/.vnc
