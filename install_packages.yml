@@ -1,0 +1,15 @@
+---
+- name: Install all the desired packages
+  hosts: local
+
+  vars:
+    packages:
+      - 
+
+  tasks:
+    - name: Install All packages
+      package:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ packages }}"
+
