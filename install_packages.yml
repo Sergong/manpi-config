@@ -4,7 +4,7 @@
 
   vars:
     packages:
-      - 
+      - docker
 
   tasks:
     - name: Install All packages
