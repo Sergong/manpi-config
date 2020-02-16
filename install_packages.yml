@@ -13,3 +13,13 @@
         state: present
       loop: "{{ packages }}"
 
+    - name: Ensure containerd and docker are started and enabled
+      service:
+        name: "{{ item }}"
+        state: started
+        enabled: true
+      loop:
+        - containerd
+        - docker
+
+
