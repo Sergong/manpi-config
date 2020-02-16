@@ -55,5 +55,5 @@
         volumes:
           - '/etc/localtime:/etc/localtime:ro'
           - '/var/log:/var/log:rw'
-        restart_policy: unless-stopped
+        restart_policy: always
       when: not docker_result.failed
