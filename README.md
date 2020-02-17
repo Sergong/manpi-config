@@ -14,9 +14,12 @@ Project contains the following files
 - README.md             -> This file
 - template              -> directory containing jinja2 templates
 
+# Requirements
+
+Ansible needs to be installed. On Manjaro, use the following command:
+pacman -S ansible
 
 The vault.yml should include the following variables:
-
 - vnc_pass: 
 
 

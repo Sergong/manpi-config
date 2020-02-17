@@ -1,0 +1,13 @@
+---
+- name: Install and configure Packages (Docker)
+  import_playbook: install_packages.yml
+
+- name: Install and configure Avahi for mDNS
+  import_playbook: config-avahi.yml
+
+- name: Install and configure VNC as a service # requires vnc_pass variable
+  import_playbook: config-x11vnc.yml
+
+- name: Install and configure py-kms in a docker container
+  import_playbook: install-pykms.yml
+
