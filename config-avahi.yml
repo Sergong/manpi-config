@@ -1,0 +1,26 @@
+---
+- name: Configure Avahi for Bonjour/Zeroconf
+  hosts: local
+  become: true
+
+  tasks:
+    - name: Ensure the nss-mdns package is installed
+      package:
+        name: nss-mdns
+        state: present
+
+    - name: Configure the NSSWITCH.CONF file with the correct entry
+      lineinfile:
+        path: /etc/nsswitch.conf
+        line: "hosts: files mymachines mdns4_minimal [NOTFOUND=return] resolve [!UNAVAIL=return] dns mdns4 myhostname"
+        regexp: "^hosts: file"
+        state: present
+        backup: true
+
+    - name: Ensure Avahi daemon is enabled and started
+      service:
+        name: avahi-daemon
+        state: started
+        enabled: true
+
+
