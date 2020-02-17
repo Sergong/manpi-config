@@ -3,7 +3,7 @@ Ansible Playbooks for Raspberry Pi Manjaro-KDE setup
 
 
 Project contains the following files
-- adhoc                 -> Adhoc script for initial setup
+- adhoc                 -> Adhoc script for initial setup (passwordless sudo on localhost)
 - ansible.cfg           -> contain ansible config for executing against the local host
 - config-avahi.yml      -> Playbook to install and configure Bonjour for local dynamic dns
 - config-x11vnc.yml     -> Playbook to install and configure VNC server
@@ -16,6 +16,7 @@ Project contains the following files
 
 
 The vault.yml should include the following variables:
-vnc_pass: 
+
+- vnc_pass: 
 
 
