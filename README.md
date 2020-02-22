@@ -13,6 +13,7 @@ The vault.yml (not included) needs to be created and should include the followin
 ## Included Files
 
 This project contains the following files:
+```
 ├── adhoc
 ├── ansible.cfg
 ├── config-avahi.yml
@@ -28,7 +29,7 @@ This project contains the following files:
 ├── README.md
 └── template
     └── x11vnc.service.j2
-
+```
 
 adhoc                 -> Adhoc script for initial setup (passwordless sudo on localhost)
 ansible.cfg           -> contain ansible config for executing against the local host
