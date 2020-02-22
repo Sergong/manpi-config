@@ -1,8 +1,18 @@
 # manpi-config
-Ansible Playbooks for Raspberry Pi Manjaro-KDE setup
+Ansible Playbooks for configuration of Raspberry Pi Manjaro-KDE
 
 
-Project contains the following files
+## Requirements
+
+Ansible (>= 2.8) needs to be installed. On Manjaro, use the following command:
+pacman -S ansible
+
+The vault.yml should include the following variables:
+- vnc_pass: 
+
+## Included Files
+
+This project contains the following files:
 - adhoc                 -> Adhoc script for initial setup (passwordless sudo on localhost)
 - ansible.cfg           -> contain ansible config for executing against the local host
 - config-avahi.yml      -> Playbook to install and configure Bonjour for local dynamic dns
@@ -13,13 +23,3 @@ Project contains the following files
 - inventory             -> Inventory file for this project (only containing localhost)
 - README.md             -> This file
 - template              -> directory containing jinja2 templates
-
-# Requirements
-
-Ansible needs to be installed. On Manjaro, use the following command:
-pacman -S ansible
-
-The vault.yml should include the following variables:
-- vnc_pass: 
-
-

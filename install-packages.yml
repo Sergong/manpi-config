@@ -5,6 +5,8 @@
   vars:
     packages:
       - docker
+      - lastpass-cli
+      - tree
 
   tasks:
     - name: Install All packages
