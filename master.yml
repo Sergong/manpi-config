@@ -3,23 +3,33 @@
   hosts: local
   vars:
     hostname: manpi.local
+    platform: Manjaro-ARM
 
   tasks:
+    # needed because hostname module on Manjaro-ARM doesn't work
     - name: Get hostname
       command: hostnamectl
       register: hostname_result
       changed_when: false
+      when: ansible_facts.lsb.id == platform
       tags: hostname
 
     - debug:
-        msg: "Hostname already is {{ hostname }}"
-      when: hostname in hostname_result.stdout
+        msg: "Plaform is {{ ansible_facts.lsb.id }} and Hostname already is {{ hostname }}"
+      when: hostname in hostname_result.stdout and ansible_facts.lsb.id == platform
       tags: hostname
 
+    # needed because hostname module on Manjaro-ARM doesn't work
     - name: Set hostname
       command: hostnamectl set-hostname {{ hostname }}
       register: hostname_result
-      when: not hostname in hostname_result.stdout
+      when: not hostname in hostname_result.stdout and ansible_facts.lsb.id == platform
+      tags: hostname
+    
+    - name: Set hostname idempotent for most distributions
+      hostname:
+        name: "{{ hostname }}"
+      when: ansible_facts.lsb.id != platform
       tags: hostname
 
 - name: Install and configure Packages (Docker)
