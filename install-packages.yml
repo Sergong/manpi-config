@@ -1,6 +1,7 @@
 ---
 - name: Install all the desired packages
   hosts: local
+  gather_facts: false
 
   vars:
     packages:

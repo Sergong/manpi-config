@@ -1,6 +1,29 @@
 ---
+- name: Master Playbook to configure Manjaro Pi host
+  hosts: local
+  vars:
+    hostname: manpi.local
+
+  tasks:
+    - name: Get hostname
+      command: hostnamectl
+      register: hostname_result
+      changed_when: false
+      tags: hostname
+
+    - debug:
+        msg: "Hostname already is {{ hostname }}"
+      when: hostname in hostname_result.stdout
+      tags: hostname
+
+    - name: Set hostname
+      command: hostnamectl set-hostname {{ hostname }}
+      register: hostname_result
+      when: not hostname in hostname_result.stdout
+      tags: hostname
+
 - name: Install and configure Packages (Docker)
-  import_playbook: install_packages.yml
+  import_playbook: install-packages.yml
 
 - name: Install and configure Avahi for mDNS
   import_playbook: config-avahi.yml

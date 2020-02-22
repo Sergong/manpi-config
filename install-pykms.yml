@@ -2,6 +2,7 @@
 - name: Install and configure pykms using docker image
   hosts: local
   become: true
+  gather_facts: false
 
   tasks:
     - name: clone pykms to /tmp

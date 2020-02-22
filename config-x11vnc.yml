@@ -1,6 +1,7 @@
 ---
 - name: play to Install and Configure X11VNC Server
   hosts: local
+  gather_facts: false
   vars:
     username: smeeuwsen
 
@@ -32,9 +33,10 @@
         mode: '0770'
 
     - name: Create a log file for vnc
-      file:
-        path: /home/{{ username }}/.vnc/x11vnc.log
-        state: touch
+      copy:
+        content: ""
+        dest: /home/{{ username }}/.vnc/x11vnc.log
+        force: false
         owner: "{{ username }}"
         group: "{{ username }}"
         mode: '0774'

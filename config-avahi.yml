@@ -2,6 +2,7 @@
 - name: Configure Avahi for Bonjour/Zeroconf
   hosts: local
   become: true
+  gather_facts: false
 
   tasks:
     - name: Ensure the nss-mdns package is installed
