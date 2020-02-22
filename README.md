@@ -5,7 +5,7 @@ Ansible Playbooks for configuration of Raspberry Pi Manjaro-KDE
 ## Requirements
 
 Ansible (>= 2.8) needs to be installed. On Manjaro, use the following command:
-pacman -S ansible
+`pacman -S ansible`
 
 The vault.yml (not included) needs to be created and should include the following variables:
 - vnc_pass: 
