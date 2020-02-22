@@ -1,8 +1,9 @@
 # manpi-config
 Ansible Playbooks for configuration of Raspberry Pi Manjaro-KDE
 
+This is a project for my personal benefit. This configures/reconfigures the basic Manjaro KDE spin on my Raspberry Pi according to my preferences.
 
-## Requirements
+## Pre-Reqs
 
 Ansible (>= 2.8) needs to be installed. On Manjaro, use the following command:
 `pacman -S ansible`
