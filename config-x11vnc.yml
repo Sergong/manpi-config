@@ -45,6 +45,7 @@
       template:
         src: template/x11vnc.service.j2
         dest: /etc/systemd/system/x11vnc.service
+      notify: Restart x11vnc
 
     - name: Start and enable the x11vnc service
       service:
@@ -52,4 +53,9 @@
         state: started
         enabled: true
 
+  handlers:
+    - name: Restart x11vnc
+      service:
+        name: x11vnc
+        state: restarted
 
