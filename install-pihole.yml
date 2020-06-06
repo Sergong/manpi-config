@@ -1,0 +1,67 @@
+---
+- name: Install and configure pihole using docker image
+  hosts: local
+  become: true
+  gather_facts: false
+
+  tasks:
+    - name: clone pihole to /tmp
+      git:
+        repo: https://github.com/pi-hole/docker-pi-hole.git
+        dest: /tmp/docker-pi-hole
+  
+#    - name: Ensure pip3 is installed
+#      package:
+#        name: python-pip
+#        state: present
+#
+#    - name: Ensure docker python module is installed
+#      pip:
+#        name: docker
+#        state: present
+
+    - name: Copy the dockerfile
+      copy:
+        src: /tmp/docker-pi-hole/Dockerfile_arm64
+        dest: /tmp/docker-pi-hole/Dockerfile
+
+    - name: build docker image based on Dockerfile
+      docker_image:
+        build:
+          path: /tmp/docker-pi-hole
+          pull: true
+        name: pihole/pihole
+        tag: latest
+        source: build
+        state: present
+      register: docker_result
+
+    - name: create the docker image using docker build
+      debug:
+        msg: "Image build successful"
+      when: not docker_result.failed
+
+    - name: start container
+      docker_container:
+        name: pihole
+        image: "pihole/pihole:latest"
+        state: started
+        tty: true
+        published_ports:
+          - '53:53/tcp'
+          - '53:53/udp'
+          - '80:80'
+          - '443:443'
+        env:
+          TZ: 'Europe/London'
+          VIRTUAL_HOST: 'pi.hole'
+          PROXY_LOCATION: 'pi.hole'
+          # ServerIP: '0.0.0.0'
+        hostname: pi.hole
+        volumes:
+          - '~/etc-pihole/:/etc/pihole/'
+          - '~/etc-dnsmasq.d/:/etc/dnsmasq.d/'
+        restart_policy: always
+        privileged: true
+      when: not docker_result.failed
+
