@@ -44,3 +44,7 @@
 - name: Install and configure py-kms in a docker container
   import_playbook: install-pykms.yml
 
+- name: Install and configure pihole in a docker container
+  import_playbook: install-pihole.yml
+
+
