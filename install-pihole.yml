@@ -47,18 +47,18 @@
         image: "pihole/pihole:latest"
         state: started
         tty: true
-        #published_ports:
-        #  - '53:53/tcp'
-        #  - '53:53/udp'
-        #  - '80:80'
-        #  - '443:443'
-        network_mode: host
+        published_ports:
+          - '53:53/tcp'
+          - '53:53/udp'
+          - '80:80'
+          - '443:443'
+        #network_mode: host
         env:
           TZ: 'Europe/London'
           VIRTUAL_HOST: 'pi.hole'
           PROXY_LOCATION: 'pi.hole'
-          ServerIP: '192.168.1.94'
-          ServerIPv6: 'fd3f:555c:a1e5:0:a952:33bf:d856:3d23'
+          #ServerIP: '192.168.1.94'
+          #ServerIPv6: 'fd3f:555c:a1e5:0:a952:33bf:d856:3d23'
         hostname: pi.hole
         volumes:
           - '~/etc-pihole/:/etc/pihole/'
