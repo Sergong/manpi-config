@@ -5,18 +5,33 @@
   gather_facts: false
 
   tasks:
-    - name: Ensure pip3 is installed
-      package:
-        name: python-pip
-        state: present
+#    - name: clone pihole to /tmp
+#      git:
+#        repo: https://github.com/pi-hole/docker-pi-hole.git
+#        dest: /tmp/docker-pi-hole
+  
+#    - name: Ensure pip3 is installed
+#      package:
+#        name: python-pip
+#        state: present
+#
+#    - name: Ensure docker python module is installed
+#      pip:
+#        name: docker
+#        state: present
 
-    - name: Ensure docker python module is installed
-      pip:
-        name: docker
-        state: present
+#    - name: Copy the dockerfile
+#      copy:
+#        src: /tmp/docker-pi-hole/Dockerfile_arm64
+#        dest: /tmp/docker-pi-hole/Dockerfile
 
     - name: Pull docker image from docker registry
       docker_image:
+#        build:
+#          path: /tmp/docker-pi-hole
+#          pull: true
+#          dockerfile: Dockerfile_arm64
+#          nocache: true
         name: pihole/pihole
         tag: latest
         source: pull
@@ -33,8 +48,6 @@
       docker_container:
         name: pihole
         state: absent
-        container_default_behavior: compatibility
-      when: not docker_result.failed
 
     - name: start container
       docker_container:
@@ -53,6 +66,8 @@
           VIRTUAL_HOST: 'pi.hole'
           PROXY_LOCATION: 'pi.hole'
           WEBPASSWORD: "{{ pi_pass }}"
+          #ServerIP: '192.168.1.94'
+          #ServerIPv6: 'fd3f:555c:a1e5:0:a952:33bf:d856:3d23'
         hostname: pi.hole
         volumes:
           - '~/etc-pihole/:/etc/pihole/'
