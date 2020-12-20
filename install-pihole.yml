@@ -33,6 +33,7 @@
       docker_container:
         name: pihole
         state: absent
+        force_kill: true
         container_default_behavior: compatibility
       when: not docker_result.failed
 
@@ -61,5 +62,6 @@
         capabilities:
           - NET_ADMIN
         privileged: true
+        container_default_behavior: compatibility
       when: not docker_result.failed
 
