@@ -20,7 +20,7 @@
         name: pihole/pihole
         tag: latest
         source: pull
-        force_source: true
+#        force_source: true
         state: present
       register: docker_result
 

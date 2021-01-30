@@ -10,8 +10,13 @@
       - tree
 
   tasks:
+    - name: Ensure the System is up-to-date (pacman -Syu)
+      pacman:
+        update_cache: true
+        upgrade: true
+
     - name: Install All packages
-      package:
+      pacman:
         name: "{{ item }}"
         state: present
       loop: "{{ packages }}"
