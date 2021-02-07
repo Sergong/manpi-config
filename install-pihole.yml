@@ -2,13 +2,41 @@
 - name: Install or Update and configure pihole using docker image
   hosts: local
   become: true
-  gather_facts: false
+  gather_facts: true
+
+  vars:
+    manjaro_family: Archlinux
+    ubuntu_family: Debian
 
   tasks:
-    - name: Ensure pip3 is installed
+    - name: Ensure pip3 is installed on Manjaro
       package:
         name: python-pip
         state: present
+      when: ansible_os_family == manjaro_family
+
+    - name: Ensure pip3 is installed on Ubuntu
+      package:
+        name: python3-pip
+        state: present
+      when: ansible_os_family == ubuntu_family
+
+    - name: Ensure DNS changes for Ubuntu are applied
+      block:
+        - name: Ensure DNS Stub is disabled for systemd-resolved on Ubuntu
+          lineinfile:
+            path: /etc/systemd/resolved.conf
+            regexp: "^#DNSStubListener=yes"
+            line: "DNSStubListener=no"
+
+        - name: Ensure /etc/resolved.conf points to the correct file
+          file:
+            src: /run/systemd/resolve/resolv.conf
+            dest: /etc/resolv.conf
+            state: link
+            force: true
+          notify: Restart systemd-resolved
+      when: ansible_os_family == ubuntu_family
 
     - name: Ensure docker python module is installed
       pip:
@@ -16,11 +44,11 @@
         state: present
 
     - name: Pull docker image from docker registry
-      docker_image:
+      community.general.docker_image:
         name: pihole/pihole
         tag: latest
         source: pull
-#        force_source: true
+        force_source: false
         state: present
       register: docker_result
 
@@ -30,7 +58,7 @@
       when: not docker_result.failed
 
     - name: Remove the existing Docker image
-      docker_container:
+      community.general.docker_container:
         name: pihole
         state: absent
         force_kill: true
@@ -38,7 +66,7 @@
       when: not docker_result.failed
 
     - name: start container
-      docker_container:
+      community.general.docker_container:
         name: pihole
         image: "pihole/pihole:latest"
         state: started
@@ -65,3 +93,8 @@
         container_default_behavior: compatibility
       when: not docker_result.failed
 
+  handlers:
+    - name: Restart systemd-resolved
+      service:
+        name: systemd-resolved.service
+        state: restarted
