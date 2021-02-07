@@ -1,6 +1,6 @@
 ---
 - name: Install and configure pykms using docker image
-  hosts: local
+  hosts: rpi
   become: true
   gather_facts: false
 
@@ -9,18 +9,13 @@
       git:
         repo: https://github.com/SystemRage/py-kms.git
         dest: /tmp/py-kms
-  
-    - name: Ensure pip3 is installed
-      package:
-        name: python-pip
-        state: present
 
     - name: Ensure docker python module is installed
       pip:
         name: docker
         state: present
 
-    - name: build docker image
+    - name: create the docker image using docker build
       docker_image:
         build:
           path: /tmp/py-kms/docker/docker-py3-kms
@@ -31,7 +26,7 @@
         state: present
       register: docker_result
 
-    - name: create the docker image using docker build
+    - name: show the docker build result
       debug:
         msg: "Image build successful"
       when: not docker_result.failed

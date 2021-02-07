@@ -1,0 +1,66 @@
+---
+- name: Ensure the System is up-to-date (apt update)
+  apt:
+    update_cache: true
+
+- name: Ensure pre-req apt packages are installed
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: true
+  loop: "{{ ubuntu_pre_packages }}"
+  
+- name: Install the Docker apt repo key
+  apt_key:
+    url: "{{ item }}"
+    state: present
+  loop: "{{ ubuntu_repo_keys }}"
+
+# - name: Download the Microsoft GPG Key
+#   shell: wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /tmp/packages.microsoft.gpg
+#   changed_when: false
+
+# - name: Ensure the gpg file is in the correct place
+#   copy:
+#     src: /tmp/packages.microsoft.gpg
+#     dest: /etc/apt/trusted.gpg.d/packages.microsoft.gpg
+#     owner: root
+#     group: root
+#     mode: '0644'
+
+- name: Get Ubuntu release
+  command: lsb_release -cs
+  register: release
+  changed_when: false
+ 
+- name: Ensure required Apt repos are present on Ubuntu
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+  loop: "{{ ubuntu_repo_urls }}"
+
+- name: Ensure the System is up-to-date (apt update)
+  apt:
+    update_cache: true
+
+- name: Install All ubuntu packages
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop: 
+    - "{{ ubuntu_packages }}"
+    - "{{ ubuntu_docker_packages }}"
+
+- name: Prevent docker from being upgraded
+  dpkg_selections:
+    name: "{{ item }}"
+    selection: hold
+  loop: "{{ ubuntu_docker_hold_packages }}"
+
+- name: Add the {{ ansible_ssh_user }} to the docker group
+  user:
+    name: "{{ ansible_ssh_user }}"
+    groups: docker
+    append: true
+
+  

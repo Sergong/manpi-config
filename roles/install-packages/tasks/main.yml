@@ -1,0 +1,6 @@
+---
+- name: Ensure correct distro vars are loaded
+  include_vars: "vars/{{ ansible_os_family }}.yml"
+
+- name: Ubuntu packages
+  include_tasks: "{{ ansible_os_family }}-tasks.yml"

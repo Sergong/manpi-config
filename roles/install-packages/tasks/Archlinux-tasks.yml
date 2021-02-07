@@ -1,0 +1,20 @@
+---
+- name: Ensure the System is up-to-date (pacman -Syu)
+  pacman:
+    update_cache: true
+    upgrade: true
+
+- name: Install All manjaro packages
+  pacman:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ manjaro_packages }}"
+
+- name: Ensure containerd and docker are started and enabled
+  service:
+    name: "{{ item }}"
+    state: started
+    enabled: true
+  loop:
+    - containerd
+    - docker
