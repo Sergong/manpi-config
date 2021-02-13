@@ -1,27 +1,47 @@
 ---
 - name: Configure Avahi for Bonjour/Zeroconf
-  hosts: local
+  hosts: rpi
   become: true
-  gather_facts: false
+
+  vars:
+    manjaro_family: Archlinux
+    ubuntu_family: Debian
 
   tasks:
-    - name: Ensure the nss-mdns package is installed
-      package:
-        name: nss-mdns
-        state: present
+    - name: Avahi configuration steps for Manjaro
+      block: 
+        - name: Ensure the nss-mdns package is installed
+          package:
+            name: nss-mdns
+            state: present
 
-    - name: Configure the NSSWITCH.CONF file with the correct entry
-      lineinfile:
-        path: /etc/nsswitch.conf
-        line: "hosts: files mymachines mdns4_minimal [NOTFOUND=return] resolve [!UNAVAIL=return] dns mdns4 myhostname"
-        regexp: "^hosts: file"
-        state: present
-        backup: true
+        - name: Configure the NSSWITCH.CONF file with the correct entry
+          lineinfile:
+            path: /etc/nsswitch.conf
+            line: "hosts: files mymachines mdns4_minimal [NOTFOUND=return] resolve [!UNAVAIL=return] dns mdns4 myhostname"
+            regexp: "^hosts: file"
+            state: present
+            backup: true
 
-    - name: Ensure Avahi daemon is enabled and started
-      service:
-        name: avahi-daemon
-        state: started
-        enabled: true
+        - name: Ensure Avahi daemon is enabled and started
+          service:
+            name: avahi-daemon
+            state: started
+            enabled: true
+      when: ansible_os_family == manjaro_family
 
+    - name: Install Avahi Daemon on Ubuntu
+      block:
+        - name: Ensure avahi-daemon is installed
+          apt:
+            name: avahi-daemon
+            state: latest
+            update_cache: true
 
+        - name: Test if we can reach {{ ansible_hostname }}.local
+          command: ping -c1 {{ ansible_hostname }}.local 
+          register: ping_result
+          changed_when: false
+          failed_when: '"100% packet loss," in ping_result.stdout'
+
+      when: ansible_os_family == ubuntu_family            
