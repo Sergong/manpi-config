@@ -20,6 +20,7 @@
         build:
           path: /tmp/py-kms/docker/docker-py3-kms
           pull: true
+          dockerfile: Dockerfile.arm64v8
         name: pykms/pykms
         tag: py3-kms
         source: build
