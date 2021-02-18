@@ -7,33 +7,12 @@
   pip:
     name: docker
     state: present
-
-- name: Pull docker image from docker registry
-  docker_image:
-    name: pihole/pihole
-    tag: latest
-    source: pull
-    force_source: false
-    state: present
-  register: docker_result
-
-- name: Docker Build Debug message
-  debug:
-    msg: "Image pull successful"
-  when: not docker_result.failed
-
-- name: Remove the existing Docker image
-  docker_container:
-    name: pihole
-    state: absent
-    force_kill: true
-    #container_default_behavior: compatibility
-  when: not docker_result.failed
-
+    
 - name: start container
   docker_container:
     name: pihole
     image: "pihole/pihole:latest"
+    pull: true
     state: started
     tty: true
     published_ports:
@@ -56,4 +35,3 @@
       - NET_ADMIN
     privileged: true
     #container_default_behavior: compatibility
-  when: not docker_result.failed
