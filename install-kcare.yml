@@ -1,0 +1,27 @@
+---
+- name: Install Kernel Care on Raspberry Pi Ubuntu Server 20.04
+  hosts: rpi
+  become: true
+
+  tasks:
+    - name: Download .deb package
+      get_url:
+        url: https://patches.kernelcare.com/kernelcare_2.22-1_arm64.deb20.04.deb
+        dest: kernelcare_2.22-1_arm64.deb20.04.deb
+
+    - name: Install deb package
+      shell: |
+        export KCARE_REGISTRATION_URL=https://patches.kernelcare.com/api
+        sudo -E apt install ./kernelcare_2.22-1_arm64.deb20.04.deb
+
+    # kcare_key is in group_vars vault
+    - name: Register the Key
+      shell: kcarectl --register {{ kcare_key }}
+
+    - name: Update the kernel
+      shell: kcarectl --update
+      register: kcare_result
+
+    - name: Show the result
+      debug:
+        var: kcare_result
