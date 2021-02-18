@@ -54,3 +54,14 @@
           - '/var/log:/var/log:rw'
         restart_policy: always
       when: not docker_result.failed
+
+    - name: Open firewall ports for pykms on Ubuntu
+      ufw:
+        rule: allow
+        port: "{{ item }}"
+        proto: tcp
+      loop:
+        - '8080'
+        - '1688'
+      when: ansible_os_family == "Debian"
+
