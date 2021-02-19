@@ -25,3 +25,7 @@
     - name: Show the result
       debug:
         var: kcare_result
+
+    - name: Enqble Auto Updating of the kernel
+      shell: kcarectl --enable-auto-update
+    
