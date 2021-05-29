@@ -22,10 +22,11 @@ ubuntu_packages:
 # the result is that the docker can't/won't run the image...
 # the version pinning is currently set to ubuntu focal fossa (20.04), this would need to change for other debian families
 ubuntu_docker_packages:
-  - docker-ce=5:19.03.15~3-0~ubuntu-focal 
-  - docker-ce-cli=5:19.03.15~3-0~ubuntu-focal
+  - docker-ce #=5:19.03.15~3-0~ubuntu-focal 
+  - docker-ce-cli #=5:19.03.15~3-0~ubuntu-focal
   - containerd.io
-ubuntu_docker_hold_packages:
-  - docker-ce
-  - docker-ce-cli
+
+# ubuntu_docker_hold_packages:
+#   - docker-ce
+#   - docker-ce-cli
 

@@ -51,11 +51,11 @@
     - "{{ ubuntu_packages }}"
     - "{{ ubuntu_docker_packages }}"
 
-- name: Prevent docker from being upgraded
-  dpkg_selections:
-    name: "{{ item }}"
-    selection: hold
-  loop: "{{ ubuntu_docker_hold_packages }}"
+# - name: Prevent docker from being upgraded # this is no longer needed since 5:20.10.6~3-0~ubuntu-focal arm64
+#   dpkg_selections:
+#     name: "{{ item }}"
+#     selection: hold
+#   loop: "{{ ubuntu_docker_hold_packages }}"
 
 - name: Add the {{ ansible_ssh_user }} to the docker group
   user:
