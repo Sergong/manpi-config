@@ -2,7 +2,7 @@
 - name: Install and configure pykms using docker image
   hosts: rpi
   become: true
-  gather_facts: false
+  gather_facts: true
 
   tasks:
     - name: clone pykms to /tmp
