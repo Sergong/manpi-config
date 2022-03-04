@@ -1,5 +1,4 @@
 ---
-
 - name: include distro specific tasks
   include_tasks: "{{ ansible_os_family }}-tasks.yml"
 
@@ -34,4 +33,4 @@
     capabilities:
       - NET_ADMIN
     privileged: true
-    #container_default_behavior: compatibility
+    container_default_behavior: compatibility
