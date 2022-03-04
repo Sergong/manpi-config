@@ -1,6 +1,6 @@
 ---
 
-- name: include disto specific tasks
+- name: include distro specific tasks
   include_tasks: "{{ ansible_os_family }}-tasks.yml"
 
 - name: Ensure docker python module is installed
