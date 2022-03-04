@@ -1,9 +1,0 @@
----
-- name: Install or Update and configure pihole using docker image
-  hosts: rpi
-  become: true
-  gather_facts: true
-
-  roles:
-    - install-pihole
-    
